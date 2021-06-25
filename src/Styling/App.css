@@ -1,0 +1,43 @@
+/* Containers */
+
+.homeContainer {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+  .contactContainer {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    font-weight: bold;
+    height: auto;
+  }
+  .aboutContainer {
+    text-align: center;
+    height: auto;
+  }
+  .registerFormContainer {
+    display: flex;
+    text-align: center;
+    font-size: 20px;
+    flex-direction: column;
+    padding: 20px;
+    height: auto;
+  }
+  .loginFormContainer {
+    display: flex;
+    text-align: center;
+    font-size: 20px;
+    flex-direction: column;
+    padding: 20px;
+    height: 400px;
+  }
+
+  .navContainer {
+    text-align: center;
+    
+  }
