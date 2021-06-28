@@ -12,6 +12,11 @@ import schema from './Validation/FormSchema'
 import ArticlesList from './components/ArticlesList'
 import { axiosWithAuth } from './utils/axiosWithAuth';
 import styling from './Styling/App.css'
+import AddArticle from './Forms/AddArticle'
+import AddCategory from './Forms/AddCategory'
+import CategoryList from './components/CategoryList'
+import { connect } from 'react-redux'
+import AssignCategory from './Forms/AssignCategory'
 
 
 
@@ -37,7 +42,7 @@ const initialLoginValues = {
   password: '',
 }
 
-export default function App() {
+const App = (props) => {
 
   const [articleList, setArticleList] = useState([])
   const [savedArticles, setSavedArticles] = useState([])
@@ -45,23 +50,23 @@ export default function App() {
   const [formErrors, setFormErrors] = useState(initialFormErrors)
   const [loginValues, setLoginValues] = useState(initialLoginValues)
   const [disabled, setDisabled] = useState(true)
-  const history = useHistory()
+  const { history, push } = useHistory()
 
   //get articles array from api and set to state if user is logged in
-  useEffect(() => {
-    const getArticles = () => {
-      axiosWithAuth()
-        .get('api/articles')
-        .then(response => {
-          console.log('Articles data App', response.data)
-          setArticleList(response.data)
-        })
-        .catch(err => {
-          console.log('err fetching articles: ', err)
-        })
-    }
-    getArticles()
-  }, [])
+  // useEffect(() => {
+  //   const getArticles = () => {
+  //     axiosWithAuth()
+  //       .get('api/articles')
+  //       .then(response => {
+  //         console.log('Articles data App', response.data)
+  //         setArticleList(response.data)
+  //       })
+  //       .catch(err => {
+  //         console.log('err fetching articles: ', err)
+  //       })
+  //   }
+  //   getArticles()
+  // }, [])
 
   // On change handler for the form values in Register.js
   const onChange = (name, value) => {
@@ -86,6 +91,15 @@ export default function App() {
     });
   };
 
+  // Submit Action for TestArticleList.js to get data using redux
+
+  // const getArticleListHandler = e => {
+  //   e.preventDefault()
+  //   console.log('clicked')
+  //   props.getArticleList()
+  //   push('/articles')
+  // }
+
   // Submit function for Register.js
   const onSubmit = () => {
     const newUser = {
@@ -96,7 +110,7 @@ export default function App() {
       username: formValues.username.trim(),
       terms: formValues.terms
     };
-    history.push('/registration-complete');
+    push('/registration-complete');
     postNewUser(newUser);
   };
 
@@ -114,7 +128,7 @@ export default function App() {
       username: loginValues.username,
       password: loginValues.password,
     };
-    history.push('/articles');
+    push('/articles');
     loginUser(user);
   };
 
@@ -153,12 +167,6 @@ export default function App() {
       })
   }
 
-
-
-  const addSavedArticles = id => {
-
-  }
-
   return (
     < div className='navContainer'>
       <nav>
@@ -179,6 +187,18 @@ export default function App() {
         <Link to='/contact'>
           <button className='contactButton'>Contact</button>
         </Link>
+        <Link to='/add-article'>
+          <button className='addArticleButton'>Add Article</button>
+        </Link>
+        <Link to='/articles'>
+          <button className='articleButton'>Article List</button>
+        </Link>
+        <Link to='/add-category'>
+          <button className='addCategoryButton'>Add New Category</button>
+        </Link>
+        <Link to='/all-categories'>
+          <button className='allCategoryButton'>See All Categories</button>
+        </Link>
 
       </nav>
 
@@ -187,10 +207,11 @@ export default function App() {
         <Route exact path='/about' component={About} />
         <Route exact path='/contact' component={Contact} />
         <Route exact path='/registration-complete' component={Complete} />
-        <Route exact path='/articles' >
-          <ArticlesList articles={articleList} />
-        </Route>
-        <Route exact path='/register'>
+        <Route exact path='/articles' component={ArticlesList} />
+        <Route exact path='/add-article' component={AddArticle}/>
+        <Route exact path='/add-category' component={AddCategory}/>
+        <Route exact path='/all-categories' component={CategoryList}/>
+        <Route exact path='/register'>        
 
           <RegisterForm
             values={formValues}
@@ -214,3 +235,12 @@ export default function App() {
   );
 
 }
+
+const mapStateToProps = state => {
+  return {
+    articles: state.articles,
+    categories: state.category
+  }
+}
+
+export default connect(mapStateToProps, {})(App)
